@@ -1,0 +1,1 @@
+# inspectit-ocelot-configuration-docs
