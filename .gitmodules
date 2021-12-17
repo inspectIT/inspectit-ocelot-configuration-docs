@@ -1,3 +1,3 @@
 [submodule "inspectit_ocelot_repo"]
 	path = inspectit_ocelot_repo
-	url = https://github.com/inspectIT/inspectit-ocelot.git
+	url = https://github.com/aaronweissler/inspectit-ocelot.git
