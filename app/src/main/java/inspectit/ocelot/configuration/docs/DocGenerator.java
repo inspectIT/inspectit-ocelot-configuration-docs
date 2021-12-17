@@ -193,18 +193,67 @@ public class DocGenerator {
     public void jacksonTest() throws IOException {
 
         String inputString = loadAndMergeAllYamls();
-        //needed for now to exclude first key in yaml
-        //inputString = inputString.substring(13);
+        String cleanedInputString = replacePlaceholders(inputString);
 
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
         SimpleModule module = new SimpleModule();
         module.addDeserializer(Duration.class, new CustomDurationDeserializer());
         mapper.registerModule(module);
         mapper.setPropertyNamingStrategy(PropertyNamingStrategies.KEBAB_CASE);
-        ObjectReader reader = mapper.reader().withRootName("inspectit").forType(InspectitConfig.class);
 
-        InspectitConfig config = reader.readValue(inputString);
+        ObjectReader reader = mapper.reader().withRootName("inspectit").forType(InspectitConfig.class);
+        InspectitConfig config = reader.readValue(cleanedInputString);
+
         int a = 1;
+    }
+
+    private String replacePlaceholders(String yamlString) throws JsonProcessingException {
+
+        //deserialize to Map to get the placeholders' values from
+        ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+        Map yamlMap = mapper.readValue(yamlString, Map.class);
+
+        int index = yamlString.indexOf("${");
+        while (index >= 0) {
+
+            //get String within the curly braces of ${placeholder} expression
+            String replacementSubstring = yamlString.substring(index + 2);
+            replacementSubstring = replacementSubstring.substring(0, replacementSubstring.indexOf("}"));
+            log.debug("Index: " + index +", Current replaced Placeholder:" + replacementSubstring);
+
+            //get keys within the placeholder, e.g. "inspectit" and "service-name" from inspectit.service-name
+            List<String> keys = Arrays.asList(replacementSubstring.split("\\."));
+
+            String newSubstring = getNestedValue(yamlMap, keys);
+
+            yamlString = yamlString.replace("${" + replacementSubstring + "}", newSubstring);
+            index = yamlString.indexOf("${");
+        }
+
+        return yamlString;
+    }
+
+    private String getNestedValue(Map map, List<String> keys) {
+        Object value = map;
+        String old_key = "";
+
+        for (String key : keys) {
+            Object new_value = ((Map) value).get(old_key + key);
+            if (new_value != null) {
+                value = new_value;
+            } else {
+                if(keys.get(keys.size()-1)==key){
+                    //if the corresponding value can not be found, return empty String
+                    // TODO: 17.12.2021 Not ideal, because it breaks some entries for environmental(?) variables
+                    //  in inspectit.config.http, but it should be fine for the documentation purpose despite this flaw
+                    return "";
+                } else {
+                    old_key = old_key + key + ".";
+                }
+            }
+        }
+
+        return value.toString();
     }
 
     public static Duration parseHuman(String text) {
