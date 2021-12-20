@@ -15,10 +15,11 @@ import java.nio.file.Paths;
 public class App {
 
     public static void main(String[] args) throws IOException {
-        DocGenerator docGenerator = new DocGenerator(
+        DocGenerator docGenerator = new DocGenerator();
+        docGenerator.parseConfig(
                 "C:\\Users\\awi\\Documents\\GitHub\\inspectit-ocelot-configuration-docs\\" +
                         "inspectit_ocelot_repo\\inspectit-ocelot-config\\src\\main\\resources\\rocks\\inspectit\\" +
-                        "ocelot\\config\\default");
-        docGenerator.jacksonTest();
+                        "ocelot\\config\\defaul");
+        int i = 1;
     }
 }
