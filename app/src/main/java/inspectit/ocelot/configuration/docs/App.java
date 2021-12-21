@@ -19,7 +19,7 @@ public class App {
         docGenerator.parseConfig(
                 "C:\\Users\\awi\\Documents\\GitHub\\inspectit-ocelot-configuration-docs\\" +
                         "inspectit_ocelot_repo\\inspectit-ocelot-config\\src\\main\\resources\\rocks\\inspectit\\" +
-                        "ocelot\\config\\defaul");
+                        "ocelot\\config\\default");
         int i = 1;
     }
 }
