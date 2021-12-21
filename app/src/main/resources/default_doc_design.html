@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="configDocStyle.css">
+    <title>Title</title>
+</head>
+<body>
+
+    <h1>inspectIT Ocelot Configuration Documentation - Default</h1>
+
+    <div class="doc-section">
+        <!-- Scopes -->
+        <h2 class="section-heading">Scopes</h2>
+        <!-- Single Scope -->
+        <div class="doc-element">
+            <a id="s_jdbc_statement_execute"></a>
+            <h3 class="element-heading">s_jdbc_statement_execute</h3>
+            <div class="doc-element-content">
+                <p>Scope for Methods executing JDBC statements.</p>
+            </div>
+        </div>
+        <div class="doc-element">
+            <a id="s_jdbc_stement_execute"></a>
+            <h3 class="element-heading">s_jdbc_statement_execute</h3>
+            <div class="doc-element-content">
+                <p>Scope for Methods executing JDBC statements.</p>
+            </div>
+        </div>
+        <div class="doc-element">
+            <a id="s_jdbcstatement_execute"></a>
+            <h3 class="element-heading">s_jdbc_statement_execute</h3>
+            <div class="doc-element-content">
+                <p>Scope for Methods executing JDBC statements.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="doc-section">
+        <!-- Rules -->
+        <h2 class="section-heading">Rules</h2>
+        <!-- Single Rule -->
+        <div class="doc-element">
+            <a id="r_jdbc_tracing_statement_execute"></a>
+            <h3 class="element-heading">r_jdbc_tracing_statement_execute</h3>
+            <div class="doc-element-content">
+                <p>Traces execute/executeUpdate calls with non-prepared SQL (the SQL is given as method argument)</p>
+                <dl>
+                    <dt><h4>Include:</h4></dt>
+                    <dd>
+                        <a href="#r_jdbc_tracing_statement_execute">
+                            r_jdbc_tracing_statement_execute</a>,
+                        <a href="#r_jdbc_tracing_statement_execute">
+                            r_jdbc_tracing_statement_execute</a>
+                    </dd>
+                    <dt><h4>Scopes:</h4></dt>
+                    <dd>
+                        <a href="#s_jdbc_statement_execute">
+                            s_jdbc_statement_execute</a>,
+                        <a href="#s_jdbcstatement_execute">
+                            s_jdbcstatement_execute</a>
+                    </dd>
+                    <dt><h4>Tracing:</h4></dt>
+                    <dd>start-span: true</dd>
+                    <dd>
+                        <dl>
+                            <dt>start-span-conditions:</dt>
+                            <dd>only-if-true: jdbc_is_entry</dd>
+                        </dl>
+                    </dd>
+                    <dd>
+                        <dl>
+                            <dt>attributes:</dt>
+                            <dd>db.type: db_type_sql</dd>
+                            <dd> db.url: jdbc_url</dd>
+                        </dl>
+                    </dd>
+                    <dt><h4>Exit/Entry:</h4></dt>
+                    <dd>
+                        <dl>
+                            <dt>attributes:</dt>
+                            <dd>class_name: <a href="a_method_getClassFQN">
+                                a_method_getClassFQN</a>
+                            </dd>
+                            <dd>method_name_with_params: <a href="a_method_getNameWithParameters">
+                                a_method_getNameWithParameters</a>
+                            </dd>
+                            <dd>method_is_error: <a href="a_logic_isNotNull">
+                                a_logic_isNotNull</a>
+                            </dd>
+                        </dl>
+                    </dd>
+                    <dt><h4>Metrics:</h4></dt>
+                    <dd>
+                        <div class="metric">
+                            <div>[method/duration]</div>
+                            <dl>
+                                <dt>value:</dt>
+                                <dd>method_duration</dd>
+                                <dt>tags:</dt>
+                                <dd>class: class_name</dd>
+                                <dd>method: method_name_with_params</dd>
+                                <dd>error: method_is_error</dd>
+                            </dl>
+                        </div>
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+
+    <div class="doc-section">
+        <!-- Actions -->
+        <h2 class="section-heading">Actions</h2>
+        <!-- Single Action -->
+        <div class="doc-element">
+            <a id="a_debug_println"></a>
+            <h3 class="element-heading">a_debug_println</h3>
+            <div class="doc-element-content">
+                <p>Prints a given Object to stdout</p>
+                <dl>
+                    <dt><h4>Inputs:</h4></dt>
+                    <dd>ObjectAttachments _attachments: contains the attachments</dd>
+                    <dd>String target: The target Object</dd>
+                    <dd>String key: Key for retrieving of attachment</dd>
+
+                    <dt><h4>Return Value:</h4></dt>
+                    <dd>
+                        <p>Returns the retrieved attachment</p>
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

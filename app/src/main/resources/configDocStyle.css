@@ -1,0 +1,39 @@
+h1 {
+    background-color: #de6f00;
+    color: #ffffff;
+    font-family: "Segoe UI Semibold";
+    padding: 12px;
+    margin: 0;
+}
+
+body {
+    font-family: "Segoe UI";
+}
+
+.doc-section{
+    background-color: #e6e6e6;
+    padding: 1px 2px;
+    border: 1px solid grey;
+    margin: 10px;
+}
+
+.section-heading {
+    padding-left: 5px;
+    margin-bottom: 15px;
+    margin-top: 5px;
+}
+
+.doc-element{
+    margin: 8px;
+}
+
+.doc-element-content{
+    background-color: white;
+    padding: 1px 10px;
+}
+
+.element-heading{
+    padding: 2px 8px;
+    margin: 0;
+    background-color: #ffcd9c; /*#ffc387*/
+}
