@@ -8,6 +8,7 @@ h1 {
 
 body {
     font-family: "Segoe UI";
+    white-space: pre-wrap;
 }
 
 .doc-section{
