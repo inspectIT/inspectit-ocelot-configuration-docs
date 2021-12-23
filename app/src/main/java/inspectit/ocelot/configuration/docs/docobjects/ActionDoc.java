@@ -6,9 +6,9 @@ import java.util.List;
 
 public class ActionDoc extends BaseDoc {
 
-    public ActionDoc(String name, String description, List<ActionInputDoc> inputs,
+    public ActionDoc(String description, String name, List<ActionInputDoc> inputs,
                      String returnDescription, Boolean isVoid) {
-        super(name, description, DocType.ACTION);
+        super(description, name, DocType.ACTION);
         this.inputs = inputs;
         this.returnDescription = returnDescription;
         this.isVoid = isVoid;

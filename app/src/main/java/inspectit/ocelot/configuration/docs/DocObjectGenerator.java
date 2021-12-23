@@ -44,7 +44,7 @@ public class DocObjectGenerator {
             if(doc != null) {
                 description = doc.get_description();
             }
-            scopeDocs.add(new ScopeDoc(scopeName, description));
+            scopeDocs.add(new ScopeDoc(description, scopeName));
         }
         return scopeDocs;
     }
@@ -77,7 +77,7 @@ public class DocObjectGenerator {
             }
 
             actionDocs.add(new ActionDoc(
-                    actionName, description, inputs, returnDesc, isVoid));
+                    description, actionName, inputs, returnDesc, isVoid));
         }
         return actionDocs;
     }
@@ -121,23 +121,6 @@ public class DocObjectGenerator {
 
                 Map<String, String> startSpanConditions = new HashMap<>();
                 ConditionalActionSettings conditionalActionSettings = tracingSettings.getStartSpanConditions();
-
-                /*String onlyIfNull = conditionalActionSettings.getOnlyIfNull();
-                if (onlyIfNull != null) {
-                    startSpanConditions.put("onlyIfNull", onlyIfNull);
-                }
-                String onlyIfNotNull = conditionalActionSettings.getOnlyIfNotNull();
-                if (onlyIfNull != null) {
-                    startSpanConditions.put("onlyIfNotNull", onlyIfNotNull);
-                }
-                String onlyIfTrue = conditionalActionSettings.getOnlyIfTrue();
-                if (onlyIfNull != null) {
-                    startSpanConditions.put("onlyIfTrue", onlyIfTrue);
-                }
-                String onlyIfFalse = conditionalActionSettings.getOnlyIfFalse();
-                if (onlyIfNull != null) {
-                    startSpanConditions.put("onlyIfFalse", onlyIfFalse);
-                }*/
 
                 for (Field field : conditionalActionSettings.getClass().getFields()) {
 

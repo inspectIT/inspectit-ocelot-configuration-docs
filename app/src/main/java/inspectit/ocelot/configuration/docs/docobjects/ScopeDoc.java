@@ -5,8 +5,8 @@ import static j2html.TagCreator.*;
 
 public class ScopeDoc extends BaseDoc {
 
-    public ScopeDoc(String name, String description){
-        super(name, description, DocType.SCOPE);
+    public ScopeDoc(String description, String name){
+        super(description, name, DocType.SCOPE);
     }
 
     @Override
