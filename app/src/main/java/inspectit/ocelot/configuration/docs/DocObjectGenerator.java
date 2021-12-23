@@ -56,7 +56,7 @@ public class DocObjectGenerator {
             ActionDocSettings doc = actionSettings.get_doc();
 
             String description = "";
-            String returnDesc = "";
+            String returnDesc = null;
 
             Map<String, String> inputDescriptions = Collections.emptyMap();
 
@@ -108,10 +108,11 @@ public class DocObjectGenerator {
                 } else {
                     metricName = metricKey;
                 }
+                String value = currentMetric.getValue();
                 Map<String, String> dataTags = currentMetric.getDataTags();
                 Map<String, String> constantTags = currentMetric.getConstantTags();
 
-                metricsDocs.add(new RuleMetricsDoc(metricName, dataTags, constantTags));
+                metricsDocs.add(new RuleMetricsDoc(metricName, value, dataTags, constantTags));
             }
 
             RuleTracingSettings tracingSettings = ruleSettings.getTracing();
@@ -141,16 +142,17 @@ public class DocObjectGenerator {
             Map<String, List<RuleActionCallDoc>> entryExits = new HashMap<>();
             String[] fieldNames = {"preEntry", "entry", "postEntry", "preExit", "exit", "postExit"};
             for (String fieldName : fieldNames) {
-
                 try {
                     Map<String, ActionCallSettings> entryExit =
                             (Map) PropertyUtils.getProperty(ruleSettings, fieldName);
-                    List<RuleActionCallDoc> actionCallDocs = new ArrayList<>();
-                    for (String actionCallKey : entryExit.keySet()) {
-                        actionCallDocs.add(new RuleActionCallDoc(
-                                actionCallKey, entryExit.get(actionCallKey).getAction()));
+                    if(!entryExit.isEmpty()){
+                        List<RuleActionCallDoc> actionCallDocs = new ArrayList<>();
+                        for (String actionCallKey : entryExit.keySet()) {
+                            actionCallDocs.add(new RuleActionCallDoc(
+                                    actionCallKey, entryExit.get(actionCallKey).getAction()));
+                        }
+                        entryExits.put(fieldName, actionCallDocs);
                     }
-                    entryExits.put(fieldName, actionCallDocs);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
