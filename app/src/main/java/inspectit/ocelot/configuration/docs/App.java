@@ -20,7 +20,12 @@ public class App {
                 "C:\\Users\\awi\\Documents\\GitHub\\inspectit-ocelot-configuration-docs\\" +
                         "inspectit_ocelot_repo\\inspectit-ocelot-config\\src\\main\\resources\\rocks\\inspectit\\" +
                         "ocelot\\config\\default");
+
         docGenerator.generateDocObjects();
+        docGenerator.generateHTML();
+        docGenerator.saveHTML("C:\\Users\\awi\\Documents\\GitHub\\" +
+                "inspectit-ocelot-configuration-docs\\app\\src\\main\\resources\\");
+
         int i = 1;
     }
 }

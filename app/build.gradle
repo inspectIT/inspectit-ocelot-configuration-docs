@@ -29,6 +29,7 @@ dependencies {
             "com.fasterxml.jackson.datatype:jackson-datatype-jsr310",
             'ch.qos.logback:logback-classic:0.9.26',
             'org.apache.commons:commons-lang3:3.0',
+            'com.j2html:j2html:1.4.0',
             'commons-beanutils:commons-beanutils:1.9.4',
             "io.opencensus:opencensus-api:${openCensusVersion}"
     )
