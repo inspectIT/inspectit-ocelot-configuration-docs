@@ -33,7 +33,7 @@ public class RuleDoc extends BaseDoc {
             return null;
         } else {
             return div(
-                    dt(h4("Include")),
+                    dt(h4("Include:")),
                     each(include, inc ->
                             dd(
                                     a(inc).withHref(String.format("#%s", inc))
@@ -48,7 +48,7 @@ public class RuleDoc extends BaseDoc {
             return null;
         } else {
             return div(
-                    dt(h4("Scopes")),
+                    dt(h4("Scopes:")),
                     each(scopes, scope ->
                             dd(
                                     a(scope).withHref(String.format("#%s", scope))
