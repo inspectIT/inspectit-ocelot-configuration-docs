@@ -20,18 +20,18 @@ import java.util.*;
 
 public class DocObjectGenerator {
     
-    public List<BaseDoc> generateDocObjects(InspectitConfig config){
-        List<BaseDoc> docObjects = new ArrayList<>();
+    public FullDoc generateFullDocObject(InspectitConfig config){
         
         InstrumentationSettings instrumentation = config.getInstrumentation();
         Map<String, InstrumentationScopeSettings> scopes = instrumentation.getScopes();
         Map<String, GenericActionSettings> actions = instrumentation.getActions();
         Map<String, InstrumentationRuleSettings> rules = instrumentation.getRules();
         
-        docObjects.addAll(generateScopeDocs(scopes));
-        docObjects.addAll(generateActionDocs(actions));
-        docObjects.addAll(generateRuleDocs(rules));
-        return docObjects;
+        List<ScopeDoc> scopesDocs = generateScopeDocs(scopes);
+        List<ActionDoc> actionsDocs = generateActionDocs(actions);
+        List<RuleDoc> rulesDocs = generateRuleDocs(rules);
+
+        return new FullDoc(scopesDocs, actionsDocs, rulesDocs);
     }
     
     private List<ScopeDoc> generateScopeDocs(Map<String, InstrumentationScopeSettings> scopes){

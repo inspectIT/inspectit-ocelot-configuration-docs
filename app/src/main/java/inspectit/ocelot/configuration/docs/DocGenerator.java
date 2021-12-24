@@ -13,7 +13,7 @@ import java.util.List;
 public class DocGenerator {
 
     InspectitConfig config;
-    List<BaseDoc> docObjects;
+    FullDoc fullDoc;
     String html;
 
     public void parseConfig(String baseDirectory){
@@ -23,12 +23,12 @@ public class DocGenerator {
 
     public void generateDocObjects(){
         DocObjectGenerator docObjectGenerator = new DocObjectGenerator();
-        docObjects = docObjectGenerator.generateDocObjects(config);
+        fullDoc = docObjectGenerator.generateFullDocObject(config);
     }
 
     public void generateHTML(){
         DocHTMLGenerator docHTMLGenerator = new DocHTMLGenerator();
-        html = docHTMLGenerator.generateHTMLDoc(docObjects);
+        html = docHTMLGenerator.generateHTMLDoc(fullDoc);
     }
 
     public void saveHTML(String targetDirectory){

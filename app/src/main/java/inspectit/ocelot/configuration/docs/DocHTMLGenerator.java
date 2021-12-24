@@ -15,9 +15,9 @@ import static j2html.TagCreator.*;
 @Slf4j
 public class DocHTMLGenerator {
 
-    public String generateHTMLDoc(List<BaseDoc> docObjects){
+    public String generateHTMLDoc(FullDoc fullDoc){
         String cssPath = "configDocStyle.css";
-        return baseTemplate(cssPath, docObjects).render();
+        return baseTemplate(cssPath, fullDoc).render();
     }
 
     /* gives Path somewhere in build directory, don't want that
@@ -33,7 +33,7 @@ public class DocHTMLGenerator {
         }
     }*/
 
-    private Tag baseTemplate(String cssPath, List<BaseDoc> docObjects){
+    private Tag baseTemplate(String cssPath, FullDoc fullDoc){
         return html(
                 head(
                         title("inspectIT Ocelot ConfigDoc"),
@@ -44,20 +44,17 @@ public class DocHTMLGenerator {
                         div(
                                 attrs(".doc-section"),
                                 h2(attrs(".section-heading"), "Scopes"),
-                                each(filter(docObjects, docObject -> docObject.getDocType()== BaseDoc.DocType.SCOPE),
-                                        BaseDoc::mainConfigDocPartial)
+                                each(fullDoc.getScopes(), BaseDoc::mainConfigDocPartial)
                         ),
                         div(
                                 attrs(".doc-section"),
                                 h2(attrs(".section-heading"), "Rules"),
-                                each(filter(docObjects, docObject -> docObject.getDocType()== BaseDoc.DocType.RULE),
-                                        BaseDoc::mainConfigDocPartial)
+                                each(fullDoc.getRules(), BaseDoc::mainConfigDocPartial)
                         ),
                         div(
                                 attrs(".doc-section"),
                                 h2(attrs(".section-heading"), "Actions"),
-                                each(filter(docObjects, docObject -> docObject.getDocType()== BaseDoc.DocType.ACTION),
-                                        BaseDoc::mainConfigDocPartial)
+                                each(fullDoc.getActions(), BaseDoc::mainConfigDocPartial)
                         )
                 )
         );
