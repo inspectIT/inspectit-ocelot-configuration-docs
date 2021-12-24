@@ -17,9 +17,9 @@ public class RuleMetricsDoc {
     }
 
     Tag metricHtml(){
-        return div(
+        return dd(
                 attrs(".metric"),
-                div(name),
+                strong(name),
                 dl(
                         dt("Value:"),
                         dd(value),
