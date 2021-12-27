@@ -9,4 +9,4 @@
 
 rootProject.name = 'inspectit-ocelot-configuration-docs'
 include('app', ':inspectit-ocelot-config')
-project(':inspectit-ocelot-config').projectDir = new File("inspectit_ocelot_repo/inspectit-ocelot-config")
+project(':inspectit-ocelot-config').projectDir = new File("../inspectit-ocelot/inspectit-ocelot-config")
