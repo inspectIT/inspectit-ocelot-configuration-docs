@@ -32,17 +32,8 @@ public class DocConfigParser {
     private static final Predicate<String> HAS_YAML_ENDING = filePath -> filePath.toLowerCase()
             .endsWith(".yml") || filePath.toLowerCase().endsWith(".yaml");
 
-    /**
-     * Creates an InspectitConfig based on the information of all YAML Files found in the given directory and all its
-     * subdirectories
-     * @param absoluteDirectoryPath absolute path to the directory.
-     * @throws IOException
-     */
-    public InspectitConfig parseConfigFromBaseDirectory(String absoluteDirectoryPath){
+    public InspectitConfig parseConfigFromYamls(List<String> allYamlFiles){
 
-        Path absoluteBasePath = Paths.get(absoluteDirectoryPath);
-
-        List<String> allYamlFiles = getAllYamlFiles(absoluteBasePath);
         String inputString = loadAndMergeMultiple(allYamlFiles);
 
         String cleanedInputString = replacePlaceholders(inputString);
@@ -64,6 +55,21 @@ public class DocConfigParser {
             e.printStackTrace();
             return null;
         }
+    }
+
+    /**
+     * Creates an InspectitConfig based on the information of all YAML Files found in the given directory and all its
+     * subdirectories
+     * @param absoluteDirectoryPath absolute path to the directory.
+     * @throws IOException
+     */
+    public InspectitConfig parseConfigFromBaseDirectory(String absoluteDirectoryPath){
+
+        Path absoluteBasePath = Paths.get(absoluteDirectoryPath);
+
+        List<String> allYamlFiles = getAllYamlFiles(absoluteBasePath);
+
+        return parseConfigFromYamls(allYamlFiles);
     }
 
     /**

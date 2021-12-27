@@ -1,6 +1,7 @@
 package inspectit.ocelot.configuration.docs;
 
 import inspectit.ocelot.configuration.docs.docobjects.BaseDoc;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import rocks.inspectit.ocelot.config.model.InspectitConfig;
 
@@ -10,6 +11,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 @Slf4j
+@Data
 public class DocGenerator {
 
     InspectitConfig config;
@@ -21,7 +23,7 @@ public class DocGenerator {
         config = configParser.parseConfigFromBaseDirectory(baseDirectory);
     }
 
-    public void generateDocObjects(){
+    public void generateFullDoc(){
         DocObjectGenerator docObjectGenerator = new DocObjectGenerator();
         fullDoc = docObjectGenerator.generateFullDocObject(config);
     }
