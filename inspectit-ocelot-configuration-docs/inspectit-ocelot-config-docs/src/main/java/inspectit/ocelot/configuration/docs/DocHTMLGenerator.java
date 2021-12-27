@@ -1,14 +1,8 @@
 package inspectit.ocelot.configuration.docs;
 
-import com.fasterxml.jackson.databind.ser.Serializers;
 import inspectit.ocelot.configuration.docs.docobjects.BaseDoc;
 import j2html.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
-
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Paths;
-import java.util.List;
 
 import static j2html.TagCreator.*;
 

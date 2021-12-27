@@ -1,7 +1,7 @@
 package inspectit.ocelot.configuration.docs;
 
-import inspectit.ocelot.configuration.docs.docobjects.ActionDoc;
 import inspectit.ocelot.configuration.docs.docobjects.RuleDoc;
+import inspectit.ocelot.configuration.docs.docobjects.ActionDoc;
 import inspectit.ocelot.configuration.docs.docobjects.ScopeDoc;
 import lombok.Data;
 

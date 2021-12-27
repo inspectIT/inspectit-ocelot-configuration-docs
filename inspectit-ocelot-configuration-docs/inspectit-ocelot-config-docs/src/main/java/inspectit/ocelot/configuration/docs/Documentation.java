@@ -3,15 +3,9 @@
  */
 package inspectit.ocelot.configuration.docs;
 
-import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.constructor.Constructor;
-
 import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
-public class App {
+public class Documentation {
 
     public static void main(String[] args) throws IOException {
         DocGenerator docGenerator = new DocGenerator();
@@ -23,7 +17,7 @@ public class App {
         docGenerator.generateFullDoc();
         docGenerator.generateHTML();
         docGenerator.saveHTML("C:\\Users\\awi\\Documents\\GitHub\\" +
-                "inspectit-ocelot-configuration-docs\\inspectit-config-docs\\app\\src\\main\\resources\\");
+                "inspectit-ocelot-configuration-docs\\inspectit-config-docs\\documentation\\src\\main\\resources\\");
 
         int i = 1;
     }

@@ -1,6 +1,5 @@
 package inspectit.ocelot.configuration.docs;
 
-import inspectit.ocelot.configuration.docs.docobjects.BaseDoc;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import rocks.inspectit.ocelot.config.model.InspectitConfig;
@@ -8,7 +7,6 @@ import rocks.inspectit.ocelot.config.model.InspectitConfig;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
-import java.util.List;
 
 @Slf4j
 @Data

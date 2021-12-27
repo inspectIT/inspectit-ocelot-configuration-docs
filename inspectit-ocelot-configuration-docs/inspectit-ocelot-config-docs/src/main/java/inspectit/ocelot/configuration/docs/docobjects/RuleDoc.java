@@ -1,6 +1,5 @@
 package inspectit.ocelot.configuration.docs.docobjects;
 
-import inspectit.ocelot.configuration.docs.docobjects.BaseDoc;
 import j2html.tags.Tag;
 
 import java.util.List;
