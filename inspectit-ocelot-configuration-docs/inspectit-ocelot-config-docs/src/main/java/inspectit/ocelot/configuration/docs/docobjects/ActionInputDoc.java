@@ -17,8 +17,12 @@ public class ActionInputDoc{
     String description;
 
     Tag actionInputDocHtml(){
-        return dd(String.format("%s %s: %s", type,
-                name, description)
+        return dd(
+                join(
+                        span(attrs(".actionInputType"), type),
+                        span(attrs(".actionInputName"), name), ":",
+                        span(attrs(".actionInputDescription"), description)
+                )
         );
     }
 }
