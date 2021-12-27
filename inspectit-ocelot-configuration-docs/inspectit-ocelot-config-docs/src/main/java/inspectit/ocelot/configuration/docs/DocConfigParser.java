@@ -51,7 +51,7 @@ public class DocConfigParser {
         try {
             return reader.readValue(cleanedInputString);
         } catch (IOException e) {
-            log.info("YAML String could not be parsed by Jackson.");
+            log.error("YAML String could not be parsed by Jackson. Probably an error in the configuration files.");
             e.printStackTrace();
             return null;
         }
