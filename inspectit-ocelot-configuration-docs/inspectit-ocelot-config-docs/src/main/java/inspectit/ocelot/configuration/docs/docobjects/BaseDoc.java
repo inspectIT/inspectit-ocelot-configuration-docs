@@ -1,6 +1,5 @@
 package inspectit.ocelot.configuration.docs.docobjects;
 
-import j2html.tags.DomContent;
 import j2html.tags.Tag;
 import lombok.Data;
 
@@ -11,7 +10,7 @@ import static j2html.TagCreator.*;
 @Data
 public abstract class BaseDoc {
 
-    public BaseDoc(String description, String name) {
+    public BaseDoc(String name, String description) {
         this.description = description;
         this.name = name;
     }

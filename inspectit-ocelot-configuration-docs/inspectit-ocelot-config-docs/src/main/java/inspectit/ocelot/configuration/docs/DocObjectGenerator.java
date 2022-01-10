@@ -44,7 +44,7 @@ public class DocObjectGenerator {
             if(doc != null) {
                 description = doc.get_description();
             }
-            scopeDocs.add(new ScopeDoc(description, scopeName));
+            scopeDocs.add(new ScopeDoc(scopeName, description));
         }
         return scopeDocs;
     }
@@ -76,8 +76,7 @@ public class DocObjectGenerator {
                         inputDescriptions.getOrDefault(inputName, "")));
             }
 
-            actionDocs.add(new ActionDoc(
-                    description, actionName, inputs, returnDesc, isVoid));
+            actionDocs.add(new ActionDoc(actionName, description, inputs, returnDesc, isVoid));
         }
         return actionDocs;
     }
@@ -159,7 +158,7 @@ public class DocObjectGenerator {
             }
 
             ruleDocs.add(
-                    new RuleDoc(description, ruleName, include, scopes,
+                    new RuleDoc(ruleName, description, include, scopes,
                             metricsDocs, ruleTracingDoc, entryExits)
             );
         }

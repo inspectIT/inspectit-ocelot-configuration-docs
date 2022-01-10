@@ -10,10 +10,8 @@ import static j2html.TagCreator.dl;
 
 public class RuleDoc extends BaseDoc {
 
-    public RuleDoc(String description, String name, List<String> include, List<String> scopes,
-                   List<RuleMetricsDoc> metricsDocs, RuleTracingDoc tracingDoc,
-                   Map<String, List<RuleActionCallDoc>> entryExits) {
-        super(description, name);
+    public RuleDoc(String name, String description, List<String> include, List<String> scopes, List<RuleMetricsDoc> metricsDocs, RuleTracingDoc tracingDoc, Map<String, List<RuleActionCallDoc>> entryExits) {
+        super(name, description);
         this.include = include;
         this.scopes = scopes;
         this.metricsDocs = metricsDocs;
