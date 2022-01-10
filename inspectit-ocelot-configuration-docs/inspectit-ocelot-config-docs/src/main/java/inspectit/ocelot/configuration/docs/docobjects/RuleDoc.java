@@ -13,7 +13,7 @@ public class RuleDoc extends BaseDoc {
     public RuleDoc(String description, String name, List<String> include, List<String> scopes,
                    List<RuleMetricsDoc> metricsDocs, RuleTracingDoc tracingDoc,
                    Map<String, List<RuleActionCallDoc>> entryExits) {
-        super(description, name, DocType.RULE);
+        super(description, name);
         this.include = include;
         this.scopes = scopes;
         this.metricsDocs = metricsDocs;

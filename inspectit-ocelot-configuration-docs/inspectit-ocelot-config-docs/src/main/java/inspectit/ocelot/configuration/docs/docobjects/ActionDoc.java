@@ -9,7 +9,7 @@ public class ActionDoc extends BaseDoc {
 
     public ActionDoc(String description, String name, List<ActionInputDoc> inputs,
                      String returnDescription, Boolean isVoid) {
-        super(description, name, DocType.ACTION);
+        super(description, name);
         this.inputs = inputs;
         this.returnDescription = returnDescription;
         this.isVoid = isVoid;

@@ -11,20 +11,13 @@ import static j2html.TagCreator.*;
 @Data
 public abstract class BaseDoc {
 
-    public BaseDoc(String description, String name, DocType docType) {
+    public BaseDoc(String description, String name) {
         this.description = description;
         this.name = name;
-        this.docType = docType;
-    }
-
-    public enum DocType{
-        SCOPE, ACTION, RULE
     }
 
     String description;
     String name;
-
-    DocType docType;
 
     public static Tag listKeyValueHtml(String heading, Map<String, String> map){
         if(map.isEmpty()){
