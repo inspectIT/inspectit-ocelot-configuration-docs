@@ -1,7 +1,9 @@
 package inspectit.ocelot.configuration.docs;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import inspectit.ocelot.configuration.docs.docobjects.*;
 import io.opencensus.metrics.export.Metric;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import rocks.inspectit.ocelot.config.model.InspectitConfig;
@@ -20,7 +22,9 @@ import rocks.inspectit.ocelot.config.model.metrics.definition.MetricDefinitionSe
 
 import java.lang.reflect.Field;
 import java.util.*;
+import java.util.stream.Collectors;
 
+@Slf4j
 public class DocObjectGenerator {
     
     public FullDoc generateFullDocObject(InspectitConfig config){
@@ -122,9 +126,20 @@ public class DocObjectGenerator {
                 description = doc.get_description();
             }
 
-            List<String> include = new ArrayList<>(ruleSettings.getInclude().keySet());
+            Map<String, Boolean> include = ruleSettings.getInclude();
+            List<String> includeForDoc = include.entrySet().stream()
+                    .filter(e -> e.getValue()!=null)
+                    .filter(Map.Entry::getValue)
+                    .map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
 
-            List<String> scopes = new ArrayList<>(ruleSettings.getScopes().keySet());
+            Map<String, Boolean> scopes = ruleSettings.getScopes();
+            List<String> scopesForDoc = scopes.entrySet().stream()
+                    .filter(e -> e.getValue()!=null)
+                    .filter(Map.Entry::getValue)
+                    .map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
+
 
             List<RuleMetricsDoc> metricsDocs = new ArrayList<>();
             for (String metricKey : ruleSettings.getMetrics().keySet()) {
@@ -187,7 +202,7 @@ public class DocObjectGenerator {
             }
 
             ruleDocs.add(
-                    new RuleDoc(ruleName, description, include, scopes,
+                    new RuleDoc(ruleName, description, includeForDoc, scopesForDoc,
                             metricsDocs, ruleTracingDoc, entryExits)
             );
         }
