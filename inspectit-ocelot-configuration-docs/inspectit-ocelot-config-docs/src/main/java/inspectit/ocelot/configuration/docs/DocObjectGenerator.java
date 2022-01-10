@@ -33,9 +33,13 @@ public class DocObjectGenerator {
         MetricsSettings metricsSettings = config.getMetrics();
         
         List<ScopeDoc> scopesDocs = generateScopeDocs(scopes);
+        scopesDocs.sort(Comparator.comparing(BaseDoc::getName));
         List<ActionDoc> actionsDocs = generateActionDocs(actions);
+        actionsDocs.sort(Comparator.comparing(BaseDoc::getName));
         List<RuleDoc> rulesDocs = generateRuleDocs(rules);
+        rulesDocs.sort(Comparator.comparing(BaseDoc::getName));
         List<MetricDoc> metricDocs = generateMetricDocs(metricsSettings);
+        metricDocs.sort(Comparator.comparing(BaseDoc::getName));
 
         return new FullDoc(scopesDocs, actionsDocs, rulesDocs, metricDocs);
     }
