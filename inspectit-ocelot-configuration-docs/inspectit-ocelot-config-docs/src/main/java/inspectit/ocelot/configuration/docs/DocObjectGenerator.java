@@ -40,12 +40,18 @@ public class DocObjectGenerator {
         scopesDocs.sort(Comparator.comparing(BaseDoc::getName));
         List<ActionDoc> actionsDocs = generateActionDocs(actions);
         actionsDocs.sort(Comparator.comparing(BaseDoc::getName));
-        List<RuleDoc> rulesDocs = generateRuleDocs(rules);
-        rulesDocs.sort(Comparator.comparing(BaseDoc::getName));
         List<MetricDoc> metricDocs = generateMetricDocs(metricsSettings);
         metricDocs.sort(Comparator.comparing(BaseDoc::getName));
 
-        return new FullDoc(scopesDocs, actionsDocs, rulesDocs, metricDocs);
+
+        Map<String, RuleDoc> ruleDocsMap = generateruleDocsMap(rules);
+        for(RuleDoc currentRule: ruleDocsMap.values()){
+            currentRule.addEntryExitFromIncludedRules(ruleDocsMap);
+        }
+        List<RuleDoc> ruleDocs = new ArrayList<>(ruleDocsMap.values());
+        ruleDocs.sort(Comparator.comparing(BaseDoc::getName));
+
+        return new FullDoc(scopesDocs, actionsDocs, ruleDocs, metricDocs);
     }
     
     private List<ScopeDoc> generateScopeDocs(Map<String, InstrumentationScopeSettings> scopes){
@@ -114,8 +120,8 @@ public class DocObjectGenerator {
         return actionDocs;
     }
 
-    private List<RuleDoc> generateRuleDocs(Map<String, InstrumentationRuleSettings> rules){
-        List<RuleDoc> ruleDocs = new ArrayList<>();
+    private Map<String, RuleDoc> generateruleDocsMap(Map<String, InstrumentationRuleSettings> rules){
+        Map<String, RuleDoc> ruleDocsMap = new HashMap<>();
         for(String ruleName: rules.keySet()){
 
             InstrumentationRuleSettings ruleSettings = rules.get(ruleName);
@@ -141,72 +147,84 @@ public class DocObjectGenerator {
                     .collect(Collectors.toList());
 
 
-            List<RuleMetricsDoc> metricsDocs = new ArrayList<>();
-            for (String metricKey : ruleSettings.getMetrics().keySet()) {
-                MetricRecordingSettings currentMetric = ruleSettings.getMetrics().get(metricKey);
+            List<RuleMetricsDoc> ruleMetricsDocs = generateRuleMetricsDocs(ruleSettings);
+            
+            RuleTracingDoc ruleTracingDoc = generateRuleTracingDocs(ruleSettings);
 
-                String metricName;
-                if (currentMetric.getMetric() != null) {
-                    metricName = currentMetric.getMetric();
-                } else {
-                    metricName = metricKey;
-                }
-                String value = currentMetric.getValue();
-                Map<String, String> dataTags = currentMetric.getDataTags();
-                Map<String, String> constantTags = currentMetric.getConstantTags();
+            Map<String, List<RuleActionCallDoc>> entryExits = generateRuleActionCallDocs(ruleSettings);
 
-                metricsDocs.add(new RuleMetricsDoc(metricName, value, dataTags, constantTags));
+            ruleDocsMap.put(ruleName,
+                    new RuleDoc(ruleName, description, includeForDoc, scopesForDoc,
+                            ruleMetricsDocs, ruleTracingDoc, entryExits)
+            );
+        }
+        return ruleDocsMap;
+    }
+
+    private List<RuleMetricsDoc> generateRuleMetricsDocs(InstrumentationRuleSettings ruleSettings){
+        List<RuleMetricsDoc> metricsDocs = new ArrayList<>();
+        for (String metricKey : ruleSettings.getMetrics().keySet()) {
+            MetricRecordingSettings currentMetric = ruleSettings.getMetrics().get(metricKey);
+
+            String metricName;
+            if (currentMetric.getMetric() != null) {
+                metricName = currentMetric.getMetric();
+            } else {
+                metricName = metricKey;
             }
+            String value = currentMetric.getValue();
+            Map<String, String> dataTags = currentMetric.getDataTags();
+            Map<String, String> constantTags = currentMetric.getConstantTags();
 
-            RuleTracingSettings tracingSettings = ruleSettings.getTracing();
-            RuleTracingDoc ruleTracingDoc = null;
-            if (tracingSettings!=null) {
-                Boolean startSpan = tracingSettings.getStartSpan();
+            metricsDocs.add(new RuleMetricsDoc(metricName, value, dataTags, constantTags));
+        }
+        return metricsDocs;
+    }
+    
+    private RuleTracingDoc generateRuleTracingDocs(InstrumentationRuleSettings ruleSettings){
+        RuleTracingSettings tracingSettings = ruleSettings.getTracing();
+        RuleTracingDoc ruleTracingDoc = null;
+        if (tracingSettings!=null) {
+            Boolean startSpan = tracingSettings.getStartSpan();
 
-                Map<String, String> startSpanConditions = new HashMap<>();
-                ConditionalActionSettings conditionalActionSettings = tracingSettings.getStartSpanConditions();
+            Map<String, String> startSpanConditions = new HashMap<>();
+            ConditionalActionSettings conditionalActionSettings = tracingSettings.getStartSpanConditions();
 
-                for (Field field : conditionalActionSettings.getClass().getFields()) {
+            for (Field field : conditionalActionSettings.getClass().getFields()) {
 
-                    String fieldName = field.getName();
-                    try {
-                        String fieldValue = BeanUtils.getProperty(conditionalActionSettings, fieldName);
-                        startSpanConditions.put(fieldName, fieldValue);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                Map<String, String> attributes = tracingSettings.getAttributes();
-                ruleTracingDoc = new RuleTracingDoc(startSpan, startSpanConditions, attributes);
-            }
-
-
-            Map<String, List<RuleActionCallDoc>> entryExits = new HashMap<>();
-            String[] fieldNames = {"preEntry", "entry", "postEntry", "preExit", "exit", "postExit"};
-            for (String fieldName : fieldNames) {
+                String fieldName = field.getName();
                 try {
-                    Map<String, ActionCallSettings> entryExit =
-                            (Map) PropertyUtils.getProperty(ruleSettings, fieldName);
-                    if(!entryExit.isEmpty()){
-                        List<RuleActionCallDoc> actionCallDocs = new ArrayList<>();
-                        for (String actionCallKey : entryExit.keySet()) {
-                            actionCallDocs.add(new RuleActionCallDoc(
-                                    actionCallKey, entryExit.get(actionCallKey).getAction()));
-                        }
-                        entryExits.put(fieldName, actionCallDocs);
-                    }
+                    String fieldValue = BeanUtils.getProperty(conditionalActionSettings, fieldName);
+                    startSpanConditions.put(fieldName, fieldValue);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
 
-            ruleDocs.add(
-                    new RuleDoc(ruleName, description, includeForDoc, scopesForDoc,
-                            metricsDocs, ruleTracingDoc, entryExits)
-            );
+            Map<String, String> attributes = tracingSettings.getAttributes();
+            ruleTracingDoc = new RuleTracingDoc(startSpan, startSpanConditions, attributes);
         }
-        return ruleDocs;
+        return ruleTracingDoc;
+    }
+    
+    private Map<String, List<RuleActionCallDoc>> generateRuleActionCallDocs(InstrumentationRuleSettings ruleSettings) {
+        Map<String, List<RuleActionCallDoc>> entryExits = new HashMap<>();
+        String[] fieldNames = {"preEntry", "entry", "postEntry", "preExit", "exit", "postExit"};
+        for (String fieldName : fieldNames) {
+            try {
+                Map<String, ActionCallSettings> entryExit = (Map<String, ActionCallSettings>) PropertyUtils.getProperty(ruleSettings, fieldName);
+                if (!entryExit.isEmpty()) {
+                    List<RuleActionCallDoc> actionCallDocs = new ArrayList<>();
+                    for (String actionCallKey : entryExit.keySet()) {
+                        actionCallDocs.add(new RuleActionCallDoc(actionCallKey, entryExit.get(actionCallKey).getAction()));
+                    }
+                    entryExits.put(fieldName, actionCallDocs);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return entryExits;
     }
     
 }
