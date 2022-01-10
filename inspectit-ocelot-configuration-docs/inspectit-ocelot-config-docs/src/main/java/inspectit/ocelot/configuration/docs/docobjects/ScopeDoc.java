@@ -11,10 +11,7 @@ public class ScopeDoc extends BaseDoc {
 
     @Override
     Tag specificPartialHTML() {
-        return div(
-                attrs(".doc-element-content"),
-                p(description)
-        );
+        return null;
     }
 
     @Override

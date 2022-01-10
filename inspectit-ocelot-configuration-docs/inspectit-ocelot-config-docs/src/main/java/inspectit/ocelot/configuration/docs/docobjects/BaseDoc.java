@@ -39,7 +39,11 @@ public abstract class BaseDoc {
                         attrs(".doc-element"),
                         a(attrs("#" + this.name)),
                         h3(attrs(".element-heading"), this.name),
-                        specificPartialHTML()
+                        div(
+                                attrs(".doc-element-content"),
+                                p(description),
+                                specificPartialHTML()
+                        )
         );
     }
 

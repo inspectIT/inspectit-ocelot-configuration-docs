@@ -47,8 +47,6 @@ public class ActionDoc extends BaseDoc {
     @Override
     Tag specificPartialHTML() {
         return div(
-                attrs(".doc-element-content"),
-                p(description),
                 dl(
                         inputListHtml(),
                         returnDescHtml()

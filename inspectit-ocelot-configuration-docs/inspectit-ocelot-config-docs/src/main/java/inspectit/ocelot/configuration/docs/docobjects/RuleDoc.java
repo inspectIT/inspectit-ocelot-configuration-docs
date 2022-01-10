@@ -98,16 +98,12 @@ public class RuleDoc extends BaseDoc {
 
     @Override
     Tag specificPartialHTML() {
-        return div(
-                attrs(".doc-element-content"),
-                p(description),
-                dl(
-                        includeListHtml(),
-                        scopeListHtml(),
-                        tracingHtml(),
-                        entryExitHtml(),
-                        metricsHtml()
-                )
+        return dl(
+                includeListHtml(),
+                scopeListHtml(),
+                tracingHtml(),
+                entryExitHtml(),
+                metricsHtml()
         );
     }
 
