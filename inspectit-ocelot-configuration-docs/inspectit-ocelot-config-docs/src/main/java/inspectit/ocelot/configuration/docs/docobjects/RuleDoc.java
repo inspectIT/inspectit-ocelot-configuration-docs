@@ -72,11 +72,7 @@ public class RuleDoc extends BaseDoc {
                     dd(each(entryExits.keySet(), entryExitKey ->
                             dl(
                                     dt(strong(String.format("%s:", entryExitKey))),
-                                    dd(dl(
-                                            dt("Attributes:"),
-                                            each(entryExits.get(entryExitKey), RuleActionCallDoc::actionCallDocHtml)
-                                            )
-                                    )
+                                    each(entryExits.get(entryExitKey), RuleActionCallDoc::actionCallDocHtml)
                             ))
                     )
             );
