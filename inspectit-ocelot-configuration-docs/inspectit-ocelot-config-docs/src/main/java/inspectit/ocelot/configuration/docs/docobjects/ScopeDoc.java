@@ -12,9 +12,4 @@ public class ScopeDoc extends BaseDoc {
     Tag specificPartialHTML() {
         return null;
     }
-
-    @Override
-    String toJSON() {
-        return null;
-    }
 }

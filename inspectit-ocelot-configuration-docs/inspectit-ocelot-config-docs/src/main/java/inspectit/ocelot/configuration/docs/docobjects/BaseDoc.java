@@ -48,6 +48,4 @@ public abstract class BaseDoc {
 
     abstract Tag specificPartialHTML();
 
-    abstract String toJSON();
-
 }

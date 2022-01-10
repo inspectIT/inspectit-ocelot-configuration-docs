@@ -52,9 +52,4 @@ public class ActionDoc extends BaseDoc {
                 )
         );
     }
-
-    @Override
-    String toJSON() {
-        return null;
-    }
 }

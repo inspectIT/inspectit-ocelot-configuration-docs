@@ -105,9 +105,4 @@ public class RuleDoc extends BaseDoc {
         );
     }
 
-    @Override
-    String toJSON() {
-        return null;
-    }
-
 }
