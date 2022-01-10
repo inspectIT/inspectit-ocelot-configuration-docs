@@ -1,6 +1,7 @@
 package inspectit.ocelot.configuration.docs;
 
 import inspectit.ocelot.configuration.docs.docobjects.*;
+import io.opencensus.metrics.export.Metric;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import rocks.inspectit.ocelot.config.model.InspectitConfig;
@@ -14,6 +15,8 @@ import rocks.inspectit.ocelot.config.model.instrumentation.rules.Instrumentation
 import rocks.inspectit.ocelot.config.model.instrumentation.rules.MetricRecordingSettings;
 import rocks.inspectit.ocelot.config.model.instrumentation.rules.RuleTracingSettings;
 import rocks.inspectit.ocelot.config.model.instrumentation.scope.InstrumentationScopeSettings;
+import rocks.inspectit.ocelot.config.model.metrics.MetricsSettings;
+import rocks.inspectit.ocelot.config.model.metrics.definition.MetricDefinitionSettings;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -26,12 +29,15 @@ public class DocObjectGenerator {
         Map<String, InstrumentationScopeSettings> scopes = instrumentation.getScopes();
         Map<String, GenericActionSettings> actions = instrumentation.getActions();
         Map<String, InstrumentationRuleSettings> rules = instrumentation.getRules();
+
+        MetricsSettings metricsSettings = config.getMetrics();
         
         List<ScopeDoc> scopesDocs = generateScopeDocs(scopes);
         List<ActionDoc> actionsDocs = generateActionDocs(actions);
         List<RuleDoc> rulesDocs = generateRuleDocs(rules);
+        List<MetricDoc> metricDocs = generateMetricDocs(metricsSettings);
 
-        return new FullDoc(scopesDocs, actionsDocs, rulesDocs);
+        return new FullDoc(scopesDocs, actionsDocs, rulesDocs, metricDocs);
     }
     
     private List<ScopeDoc> generateScopeDocs(Map<String, InstrumentationScopeSettings> scopes){
@@ -47,6 +53,25 @@ public class DocObjectGenerator {
             scopeDocs.add(new ScopeDoc(scopeName, description));
         }
         return scopeDocs;
+    }
+
+    private List<MetricDoc> generateMetricDocs(MetricsSettings metricsSettings){
+        Map<String, MetricDefinitionSettings> metrics = metricsSettings.getDefinitions();
+        List<MetricDoc> metricDocs = new ArrayList<>();
+        for(String metricName: metrics.keySet()){
+
+            MetricDefinitionSettings metricDefinitionSettings = metrics.get(metricName);
+
+            String description = metricDefinitionSettings.getDescription();
+            if(description==null){
+                description = "";
+            }
+            String unit = metricDefinitionSettings.getUnit();
+
+            metricDocs.add(new MetricDoc(metricName, description, unit));
+
+        }
+        return metricDocs;
     }
 
     private List<ActionDoc> generateActionDocs(Map<String, GenericActionSettings> actions){

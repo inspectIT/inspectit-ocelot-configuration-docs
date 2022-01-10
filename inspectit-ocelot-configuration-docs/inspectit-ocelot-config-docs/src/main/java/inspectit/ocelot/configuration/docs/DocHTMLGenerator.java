@@ -49,6 +49,11 @@ public class DocHTMLGenerator {
                                 attrs(".doc-section"),
                                 h2(attrs(".section-heading"), "Actions"),
                                 each(fullDoc.getActions(), BaseDoc::mainConfigDocPartial)
+                        ),
+                        div(
+                                attrs(".doc-section"),
+                                h2(attrs(".section-heading"), "Metrics"),
+                                each(fullDoc.getMetrics(), BaseDoc::mainConfigDocPartial)
                         )
                 )
         );

@@ -19,7 +19,7 @@ public class RuleMetricsDoc {
     Tag metricHtml(){
         return dd(
                 attrs(".metric"),
-                strong(name),
+                a(strong(name)).withHref(String.format("#%s", name)),
                 dl(
                         dt("Value:"),
                         dd(value),
