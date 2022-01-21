@@ -1,10 +1,13 @@
 package inspectit.ocelot.configuration.docs.docobjects;
 
 import j2html.tags.Tag;
+import lombok.Getter;
+
 import static j2html.TagCreator.*;
 
 import java.util.List;
 
+@Getter
 public class ActionDoc extends BaseDoc {
 
     public ActionDoc(String name, String description, List<ActionInputDoc> inputs, String returnDescription, Boolean isVoid) {

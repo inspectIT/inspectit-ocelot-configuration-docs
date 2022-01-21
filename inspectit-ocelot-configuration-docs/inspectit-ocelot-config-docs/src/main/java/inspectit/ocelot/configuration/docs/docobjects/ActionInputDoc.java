@@ -2,8 +2,11 @@ package inspectit.ocelot.configuration.docs.docobjects;
 
 
 import j2html.tags.Tag;
+import lombok.Getter;
+
 import static j2html.TagCreator.*;
 
+@Getter
 public class ActionInputDoc{
 
     public ActionInputDoc(String name, String type, String description){

@@ -15,6 +15,7 @@ public class DocGenerator {
     InspectitConfig config;
     FullDoc fullDoc;
     String html;
+    String markdown;
 
     public void parseConfig(String baseDirectory){
         DocConfigParser configParser = new DocConfigParser();
@@ -29,6 +30,11 @@ public class DocGenerator {
     public void generateHTML(){
         DocHTMLGenerator docHTMLGenerator = new DocHTMLGenerator();
         html = docHTMLGenerator.generateHTMLDoc(fullDoc);
+    }
+
+    public void generateMardown(){
+        DocMardownGenerator docMardownGenerator = new DocMardownGenerator();
+        markdown = docMardownGenerator.generateMarkdown(fullDoc);
     }
 
     public void saveHTML(String targetDirectory){
