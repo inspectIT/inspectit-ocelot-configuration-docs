@@ -106,7 +106,7 @@ public class RuleDoc extends BaseDoc {
             return null;
         } else {
             return div(
-                    dt(h4("Exit/Entry:")),
+                    dt(h4("Attributes:")),
                     dd(each(entryExits.keySet(), entryExitKey ->
                             dl(
                                     dt(strong(String.format("%s:", entryExitKey))),
