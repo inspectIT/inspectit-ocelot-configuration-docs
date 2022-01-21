@@ -1,19 +1,19 @@
 package inspectit.ocelot.configuration.docs.docobjects;
 
 import j2html.tags.Tag;
-import lombok.Data;
+import lombok.Getter;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static j2html.TagCreator.*;
 import static j2html.TagCreator.dl;
 
-@Data
+@Getter
 public class RuleDoc extends BaseDoc {
 
-    public RuleDoc(String name, String description, List<String> include, List<String> scopes, List<RuleMetricsDoc> metricsDocs, RuleTracingDoc tracingDoc, Map<String, List<RuleActionCallDoc>> entryExits) {
+    public RuleDoc(String name, String description, List<String> include, List<String> scopes,
+                   List<RuleMetricsDoc> metricsDocs, RuleTracingDoc tracingDoc, Map<String, Map<String,
+            RuleActionCallDoc>> entryExits) {
         super(name, description);
         this.include = include;
         this.scopes = scopes;
@@ -26,26 +26,31 @@ public class RuleDoc extends BaseDoc {
     List<String> scopes;
     List<RuleMetricsDoc> metricsDocs;
     RuleTracingDoc tracingDoc;
-    Map<String, List<RuleActionCallDoc>> entryExits;
+    Map<String, Map<String, RuleActionCallDoc>> entryExits;
 
-    public void addEntryExitFromIncludedRules(Map<String, RuleDoc> allRuleDocs){
+    public void addEntryExitFromIncludedRules(Map<String, RuleDoc> allRuleDocs, List<String> includedRules){
 
-        for(String includedRuleName: include){
+        for(String includedRuleName: includedRules){
 
             RuleDoc includedRule = allRuleDocs.get(includedRuleName);
-            Map<String, List<RuleActionCallDoc>> includedRuleEntryExits = includedRule.getEntryExits();
+            Map<String, Map<String, RuleActionCallDoc>> includedRuleEntryExits = includedRule.getEntryExits();
 
             for(String includedRuleEntryExitKey: includedRuleEntryExits.keySet()){
 
                 if(!entryExits.containsKey(includedRuleEntryExitKey)){
-                    entryExits.put(includedRuleEntryExitKey, new ArrayList<>());
+                    entryExits.put(includedRuleEntryExitKey, new TreeMap<>());
                 }
-                for(RuleActionCallDoc entryExitActionCall: includedRuleEntryExits.get(includedRuleEntryExitKey)){
-                    entryExits.get(includedRuleEntryExitKey).add(
-                            new RuleActionCallDoc(entryExitActionCall, includedRule.getName())
-                    );
+                for(RuleActionCallDoc entryExitActionCall: includedRuleEntryExits.get(includedRuleEntryExitKey).values()){
+
+                    Map<String, RuleActionCallDoc> actionCallDocs = entryExits.get(includedRuleEntryExitKey);
+
+                    if(!actionCallDocs.containsKey(entryExitActionCall.getName())) {
+                        actionCallDocs.put(entryExitActionCall.getName(), new RuleActionCallDoc(entryExitActionCall,
+                                includedRule.getName()));
+                    }
                 }
             }
+            addEntryExitFromIncludedRules(allRuleDocs, includedRule.getInclude());
         }
     }
 
@@ -88,6 +93,15 @@ public class RuleDoc extends BaseDoc {
     }
 
     Tag entryExitHtml(){
+
+        for(String key: entryExits.keySet()){
+            System.out.println(key);
+            System.out.println(entryExits.get(key).getClass());
+            for(RuleActionCallDoc doc: entryExits.get(key).values()){
+                System.out.println(doc.getName());
+            }
+        }
+
         if(entryExits.isEmpty()){
             return null;
         } else {
@@ -96,7 +110,7 @@ public class RuleDoc extends BaseDoc {
                     dd(each(entryExits.keySet(), entryExitKey ->
                             dl(
                                     dt(strong(String.format("%s:", entryExitKey))),
-                                    each(entryExits.get(entryExitKey), RuleActionCallDoc::actionCallDocHtml)
+                                    each(entryExits.get(entryExitKey).values(), RuleActionCallDoc::actionCallDocHtml)
                             ))
                     )
             );

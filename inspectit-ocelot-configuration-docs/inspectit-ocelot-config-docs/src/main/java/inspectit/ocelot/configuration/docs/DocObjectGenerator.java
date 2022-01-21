@@ -46,7 +46,7 @@ public class DocObjectGenerator {
 
         Map<String, RuleDoc> ruleDocsMap = generateruleDocsMap(rules);
         for(RuleDoc currentRule: ruleDocsMap.values()){
-            currentRule.addEntryExitFromIncludedRules(ruleDocsMap);
+            currentRule.addEntryExitFromIncludedRules(ruleDocsMap, currentRule.getInclude());
         }
         List<RuleDoc> ruleDocs = new ArrayList<>(ruleDocsMap.values());
         ruleDocs.sort(Comparator.comparing(BaseDoc::getName));
@@ -151,7 +151,7 @@ public class DocObjectGenerator {
             
             RuleTracingDoc ruleTracingDoc = generateRuleTracingDocs(ruleSettings);
 
-            Map<String, List<RuleActionCallDoc>> entryExits = generateRuleActionCallDocs(ruleSettings);
+            Map<String, Map<String, RuleActionCallDoc>> entryExits = generateRuleActionCallDocs(ruleSettings);
 
             ruleDocsMap.put(ruleName,
                     new RuleDoc(ruleName, description, includeForDoc, scopesForDoc,
@@ -207,16 +207,16 @@ public class DocObjectGenerator {
         return ruleTracingDoc;
     }
     
-    private Map<String, List<RuleActionCallDoc>> generateRuleActionCallDocs(InstrumentationRuleSettings ruleSettings) {
-        Map<String, List<RuleActionCallDoc>> entryExits = new HashMap<>();
+    private Map<String, Map<String, RuleActionCallDoc>> generateRuleActionCallDocs(InstrumentationRuleSettings ruleSettings) {
+        Map<String, Map<String, RuleActionCallDoc>> entryExits = new HashMap<>();
         String[] fieldNames = {"preEntry", "entry", "postEntry", "preExit", "exit", "postExit"};
         for (String fieldName : fieldNames) {
             try {
                 Map<String, ActionCallSettings> entryExit = (Map<String, ActionCallSettings>) PropertyUtils.getProperty(ruleSettings, fieldName);
                 if (!entryExit.isEmpty()) {
-                    List<RuleActionCallDoc> actionCallDocs = new ArrayList<>();
+                    Map<String, RuleActionCallDoc> actionCallDocs = new TreeMap<>();
                     for (String actionCallKey : entryExit.keySet()) {
-                        actionCallDocs.add(new RuleActionCallDoc(actionCallKey, entryExit.get(actionCallKey).getAction()));
+                        actionCallDocs.put(actionCallKey, new RuleActionCallDoc(actionCallKey, entryExit.get(actionCallKey).getAction()));
                     }
                     entryExits.put(fieldName, actionCallDocs);
                 }

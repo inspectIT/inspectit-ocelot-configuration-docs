@@ -27,7 +27,11 @@ public class RuleActionCallDoc {
         return dd(join(
                 String.format("%s:", name),
                 a(action).withHref(String.format("#%s", action)),
-                (inheritedFrom != null) ? i(String.format("(from included rule %s.)", inheritedFrom)) :null
+                (inheritedFrom != null) ? join(
+                        i("( from included rule"),
+                        a(inheritedFrom).withHref(String.format("#%s", inheritedFrom)),
+                        i(")")
+                ) : null
         ));
     }
 
