@@ -15,13 +15,15 @@ public class Documentation {
                         "ocelot\\config\\default");
 
         docGenerator.generateFullDoc();
-        /*docGenerator.generateHTML();
+        docGenerator.generateHTML();
         docGenerator.saveHTML("C:\\Users\\awi\\Documents\\GitHub\\" +
                 "inspectit-ocelot-configuration-docs\\inspectit-ocelot-configuration-docs\\" +
                 "inspectit-ocelot-config-docs\\src\\main\\resources\\");
-*/
+
         docGenerator.generateMardown();
-        System.out.println(docGenerator.getMarkdown());
+        docGenerator.saveMD("C:\\Users\\awi\\Documents\\GitHub\\" +
+                "inspectit-ocelot-configuration-docs\\inspectit-ocelot-configuration-docs\\" +
+                "inspectit-ocelot-config-docs\\src\\main\\resources\\");
         int i = 1;
     }
 }

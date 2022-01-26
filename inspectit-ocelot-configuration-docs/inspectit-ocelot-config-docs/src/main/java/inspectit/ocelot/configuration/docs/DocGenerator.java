@@ -33,8 +33,8 @@ public class DocGenerator {
     }
 
     public void generateMardown(){
-        DocMardownGenerator docMardownGenerator = new DocMardownGenerator();
-        markdown = docMardownGenerator.generateMarkdown(fullDoc);
+        DocMarkdownGenerator docMarkdownGenerator = new DocMarkdownGenerator();
+        markdown = docMarkdownGenerator.generateMarkdown(fullDoc);
     }
 
     public void saveHTML(String targetDirectory){
@@ -42,6 +42,15 @@ public class DocGenerator {
             writer.println(html);
         } catch(IOException e){
             log.error("Error while writing HTML file.");
+            e.printStackTrace();
+        }
+    }
+
+    public void saveMD(String targetDirectory){
+        try(PrintWriter writer = new PrintWriter(Paths.get(targetDirectory, "configDoc.md").toString(), StandardCharsets.UTF_8);){
+            writer.println(markdown);
+        } catch(IOException e){
+            log.error("Error while writing markdown file.");
             e.printStackTrace();
         }
     }
