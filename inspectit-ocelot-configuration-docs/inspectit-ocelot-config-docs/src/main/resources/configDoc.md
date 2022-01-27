@@ -163,6 +163,10 @@ Enables tracing of Apache HTTP Client calls.
 - http_status: [a_apacheclient_getStatus](#a_apacheclient_getStatus)
 ##### preEntry
 - http_is_entry: [a_entrypoint_check](#a_entrypoint_check)
+#### Tracing:
+
+##### start-span: true
+
 <a id="r_capture_method_duration"></a>
 ### r_capture_method_duration
 When applied to a method, this rule will populate method_duration with the duration the method execution took.
@@ -267,6 +271,13 @@ This rule is included by all HTTP Client tracing rules to define which attribute
 
 ##### entry
 - method_fqn: [a_method_getFQN](#a_method_getFQN)
+#### Tracing:
+
+##### start-span: null
+
+##### Attributes:
+
+- http.host: http_target_host
 <a id="r_http_parametrize_path"></a>
 ### r_http_parametrize_path
 This rule is included by all HTTP instrumentation to derive the parametrized http_path from http_raw_path.
@@ -344,6 +355,15 @@ This rule is included by all HTTP Client AND Server tracing rules to define whic
 
 ##### entry
 - method_fqn: [a_method_getFQN](#a_method_getFQN)
+#### Tracing:
+
+##### start-span: null
+
+##### Attributes:
+
+- http.status_code: http_status
+- http.method: http_method
+- http.path: http_path
 <a id="r_http_tracing_span_name_default"></a>
 ### r_http_tracing_span_name_default
 This rule is included by all HTTP tracing rules in order to define the span name.
@@ -352,6 +372,10 @@ This rule is included by all HTTP tracing rules in order to define the span name
 
 ##### entry
 - http_span_name: [a_string_concat_3](#a_string_concat_3)
+#### Tracing:
+
+##### start-span: null
+
 <a id="r_httpurlconnection_detect_end"></a>
 ### r_httpurlconnection_detect_end
 Tests and sets an "end" marker on this HTTP Url Connection object.
@@ -555,6 +579,10 @@ If no span was started yet, a fresh one is started.
 - http_status: [a_httpurlconnection_getStatus](#a_httpurlconnection_getStatus)
 ##### preEntry
 - http_is_entry: [a_entrypoint_check](#a_entrypoint_check)
+#### Tracing:
+
+##### start-span: true
+
 <a id="r_httpurlconnection_tracing_start"></a>
 ### r_httpurlconnection_tracing_start
 Starts a span for an HTTPUrlConnection before down propagation happens.
@@ -578,6 +606,10 @@ Starts a span for an HTTPUrlConnection before down propagation happens.
 - span_obj: [a_attachment_put](#a_attachment_put)
 ##### preEntry
 - http_is_entry: [a_entrypoint_check](#a_entrypoint_check)
+#### Tracing:
+
+##### start-span: true
+
 <a id="r_httpurlconnection_up_propagation"></a>
 ### r_httpurlconnection_up_propagation
 Reads up-propagated data from the response HTTP Headers.
@@ -668,6 +700,14 @@ Records JDBC statement executions in the service graph.
 - jdbc_is_entry: [a_entrypoint_check](#a_entrypoint_check)
 - jdbc_url: [a_jdbc_getUrl](#a_jdbc_getUrl)
 - method_fqn: [a_method_getFQN](#a_method_getFQN)
+#### Tracing:
+
+##### start-span: true
+
+##### Attributes:
+
+- db.type: db_type_sql
+- db.url: jdbc_url
 <a id="r_jdbc_tracing_preparedstatement"></a>
 ### r_jdbc_tracing_preparedstatement
 Traces execute/executeUpdate/executeBatch calls with prepared SQL.
@@ -682,6 +722,13 @@ Traces execute/executeUpdate/executeBatch calls with prepared SQL.
 - jdbc_is_entry: [a_entrypoint_check](#a_entrypoint_check)
 - jdbc_url: [a_jdbc_getUrl](#a_jdbc_getUrl)
 - method_fqn: [a_method_getFQN](#a_method_getFQN)
+#### Tracing:
+
+##### start-span: null
+
+##### Attributes:
+
+- db.statement: prepared_sql
 <a id="r_jdbc_tracing_statement_execute"></a>
 ### r_jdbc_tracing_statement_execute
 Traces execute/executeUpdate calls with non-prepared SQL (the SQL is given as method argument)
@@ -696,6 +743,13 @@ Traces execute/executeUpdate calls with non-prepared SQL (the SQL is given as me
 - jdbc_is_entry: [a_entrypoint_check](#a_entrypoint_check)
 - jdbc_url: [a_jdbc_getUrl](#a_jdbc_getUrl)
 - method_fqn: [a_method_getFQN](#a_method_getFQN)
+#### Tracing:
+
+##### start-span: null
+
+##### Attributes:
+
+- db.statement: _arg0
 <a id="r_jdbc_tracing_statement_executeBatch"></a>
 ### r_jdbc_tracing_statement_executeBatch
 Traces executeBatch calls with non-prepared SQL.
@@ -1005,6 +1059,10 @@ Enables tracing of HTTP calls received via the servlet API.
 ##### preEntry
 - http_is_entry: [a_entrypoint_check](#a_entrypoint_check)
 - is_http_servlet: [a_servletrequest_isHttp](#a_servletrequest_isHttp)
+#### Tracing:
+
+##### start-span: true
+
 <a id="r_trace_method"></a>
 ### r_trace_method
 This rule records the current method as a span.
@@ -1019,11 +1077,22 @@ This rule can be either included or scopes can be directly added to it.
 
 ##### entry
 - method_fqn: [a_method_getFQN](#a_method_getFQN)
+#### Tracing:
+
+##### start-span: true
+
 <a id="r_tracing_exception_attributes"></a>
 ### r_tracing_exception_attributes
 This rule by default only tags the exception name and message (using the toString() method).
 If required, it can be enhanced to include the stack trace.
 
+#### Tracing:
+
+##### start-span: null
+
+##### Attributes:
+
+- java.exception: _thrown
 <a id="r_tracing_fqn_attribute"></a>
 ### r_tracing_fqn_attribute
 This rule adds the fully qualified name of the method as span attribute
@@ -1032,6 +1101,13 @@ This rule adds the fully qualified name of the method as span attribute
 
 ##### entry
 - method_fqn: [a_method_getFQN](#a_method_getFQN)
+#### Tracing:
+
+##### start-span: null
+
+##### Attributes:
+
+- java.fqn: method_fqn
 <a id="r_tracing_global_attributes"></a>
 ### r_tracing_global_attributes
 This rule should be included by all other tracing rules.

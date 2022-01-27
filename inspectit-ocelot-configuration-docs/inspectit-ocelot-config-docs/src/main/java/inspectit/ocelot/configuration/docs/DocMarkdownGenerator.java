@@ -68,6 +68,25 @@ public class DocMarkdownGenerator {
                     sb.append(tagsMarkdown(metricDoc.getConstantTags()));
                 }
             }
+
+            // Tracing Markdown
+            RuleTracingDoc tracingDoc = ruleDoc.getTracingDoc();
+            if(tracingDoc != null) {
+                sb.append(heading("Tracing:", 4)).append("\n\n");
+
+                sb.append(heading("start-span: ", 5))
+                        .append(tracingDoc.getStartSpan()).append("\n\n");
+
+                if(!tracingDoc.getAttributes().isEmpty()){
+                    sb.append(heading("Attributes:", 5)).append("\n\n");
+                    List<Text> attributesMarkdown = tracingDoc.getAttributes().keySet().stream().map(
+                            attributeKey -> {
+                                return text(String.format("%s: %s",
+                                        attributeKey, tracingDoc.getAttributes().get(attributeKey)));
+                            }).collect(Collectors.toList());
+                    sb.append(new UnorderedList<>(attributesMarkdown)).append("\n");
+                }
+            }
         }
         return sb.toString();
     }

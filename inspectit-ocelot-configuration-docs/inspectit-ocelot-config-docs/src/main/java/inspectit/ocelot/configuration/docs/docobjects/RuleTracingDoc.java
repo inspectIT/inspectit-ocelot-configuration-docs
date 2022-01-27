@@ -1,12 +1,14 @@
 package inspectit.ocelot.configuration.docs.docobjects;
 
 import j2html.tags.Tag;
+import lombok.Getter;
 
 import java.util.Map;
 
 import static j2html.TagCreator.*;
 import static j2html.TagCreator.dd;
 
+@Getter
 public class RuleTracingDoc {
 
     public RuleTracingDoc(Boolean startSpan, Map<String, String> startSpanConditions, Map<String, String> attributes) {
