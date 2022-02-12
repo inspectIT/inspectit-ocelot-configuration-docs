@@ -1,6 +1,6 @@
-package inspectit.ocelot.configuration.docs;
+package inspectit.ocelot.configuration.docs.generators;
 
-import inspectit.ocelot.configuration.docs.docobjects.*;
+import inspectit.ocelot.config.doc.generator.docobjects.*;
 import net.steppschuh.markdowngenerator.link.Link;
 import net.steppschuh.markdowngenerator.list.UnorderedList;
 import net.steppschuh.markdowngenerator.text.Text;
@@ -43,16 +43,18 @@ public class DocMarkdownGenerator {
             }
 
             // Attributes Markdown
-            if(!ruleDoc.getEntryExits().isEmpty()) {
+            Map<String, Map<String, RuleActionCallDoc>> entryExits = ruleDoc.getEntryExits();
+            if(!entryExits.isEmpty()) {
                 sb.append(heading("Attributes:", 4)).append("\n\n");
-                for (String entryExitKey : ruleDoc.getEntryExits().keySet()) {
-                    sb.append(heading(entryExitKey, 5)).append("\n");
-                    List<Text> attributesMarkdown = ruleDoc.getEntryExits().get(entryExitKey).values().stream().map(
-                            actionCallDoc -> {
-                                return text(String.format("%s: %s", actionCallDoc.getName(),
-                                        link(actionCallDoc.getAction(), String.format("#%s", actionCallDoc.getAction()))));
-                    }).collect(Collectors.toList());
-                    sb.append(new UnorderedList<>(attributesMarkdown)).append("\n");
+                for (String entryExitKey : entryExits.keySet()) {
+                    if(!entryExits.get(entryExitKey).isEmpty()) {
+                        sb.append(heading(entryExitKey, 5)).append("\n");
+                        List<Text> attributesMarkdown = entryExits.get(entryExitKey).values().stream()
+                                .map(actionCallDoc -> text(String.format("%s: %s", actionCallDoc.getName(),
+                                        link(actionCallDoc.getAction(), String.format("#%s", actionCallDoc.getAction())))))
+                                .collect(Collectors.toList());
+                        sb.append(new UnorderedList<>(attributesMarkdown)).append("\n");
+                    }
                 }
             }
 
@@ -132,17 +134,17 @@ public class DocMarkdownGenerator {
         return sb.toString();
     }
 
-    public String generateMarkdown(FullDoc fullDoc){
+    public String generateMarkdown(ConfigDocumentation configDocumentation){
         StringBuilder sb = new StringBuilder()
                 .append(heading("inspectIT Ocelot Configuration Documentation", 1)).append("\n")
                 .append(heading("Scopes", 2)).append("\n")
-                .append(scopesMarkdown(fullDoc.getScopes()))
+                .append(scopesMarkdown(configDocumentation.getScopes()))
                 .append(heading("Rules", 2)).append("\n")
-                .append(rulesMarkdown(fullDoc.getRules()))
+                .append(rulesMarkdown(configDocumentation.getRules()))
                 .append(heading("Actions", 2)).append("\n")
-                .append(actionsMarkdown(fullDoc.getActions()))
+                .append(actionsMarkdown(configDocumentation.getActions()))
                 .append(heading("Metrics", 2)).append("\n")
-                .append(metricsMarkdown(fullDoc.getMetrics()));
+                .append(metricsMarkdown(configDocumentation.getMetrics()));
         return sb.toString();
     }
 

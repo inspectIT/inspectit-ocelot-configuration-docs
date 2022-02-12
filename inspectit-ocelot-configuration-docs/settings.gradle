@@ -8,5 +8,6 @@
  */
 
 rootProject.name = 'inspectit-ocelot-configuration-docs'
-include('inspectit-ocelot-config-docs', ':inspectit-ocelot-config')
+include('inspectit-ocelot-config-docs', ':inspectit-ocelot-config', ':inspectit-ocelot-config-doc-generator')
 project(':inspectit-ocelot-config').projectDir = new File("../inspectit-ocelot/inspectit-ocelot-config")
+project(':inspectit-ocelot-config-doc-generator').projectDir = new File("../inspectit-ocelot/components/inspectit-ocelot-config-doc-generator")

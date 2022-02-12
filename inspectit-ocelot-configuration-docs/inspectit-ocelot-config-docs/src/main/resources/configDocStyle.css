@@ -38,3 +38,8 @@ body {
     margin: 0;
     background-color: #ffcd9c; /*#ffc387*/
 }
+
+.actionInputDescription{
+    color: #545454;
+    font-family: "";
+}

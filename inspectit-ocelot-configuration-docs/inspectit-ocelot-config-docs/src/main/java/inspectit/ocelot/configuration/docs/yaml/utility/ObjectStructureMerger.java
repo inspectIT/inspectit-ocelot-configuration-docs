@@ -1,4 +1,4 @@
-package inspectit.ocelot.configuration.docs;
+package inspectit.ocelot.configuration.docs.yaml.utility;
 
 
 import java.util.*;

@@ -1,13 +1,11 @@
-package inspectit.ocelot.configuration.docs;
+package inspectit.ocelot.configuration.docs.yaml.utility;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.yaml.snakeyaml.Yaml;
-import rocks.inspectit.ocelot.config.model.InspectitConfig;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -24,7 +22,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Slf4j
-public class DocConfigParser {
+public class YamlProcessor {
 
     /**
      * Predicate to check if a given file path ends with .yml or .yaml
@@ -32,44 +30,20 @@ public class DocConfigParser {
     private static final Predicate<String> HAS_YAML_ENDING = filePath -> filePath.toLowerCase()
             .endsWith(".yml") || filePath.toLowerCase().endsWith(".yaml");
 
-    public InspectitConfig parseConfigFromYamls(List<String> allYamlFiles){
-
-        String inputString = loadAndMergeMultiple(allYamlFiles);
-
-        String cleanedInputString = replacePlaceholders(inputString);
-
-        //Parse the InspectitConfig from the created YAML String
-        ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-        //Add Module to deal with non-standard Duration values in the YAML
-        SimpleModule module = new SimpleModule();
-        module.addDeserializer(Duration.class, new CustomDurationDeserializer());
-        mapper.registerModule(module);
-        //In the YAML property-names are kebab-case in the java objects CamelCase, Jackson can do that conversion
-        //with the following line
-        mapper.setPropertyNamingStrategy(PropertyNamingStrategies.KEBAB_CASE);
-        ObjectReader reader = mapper.reader().withRootName("inspectit").forType(InspectitConfig.class);
-        try {
-            return reader.readValue(cleanedInputString);
-        } catch (IOException e) {
-            log.error("YAML String could not be parsed by Jackson. Probably an error in the configuration files.");
-            e.printStackTrace();
-            return null;
-        }
-    }
-
     /**
      * Creates an InspectitConfig based on the information of all YAML Files found in the given directory and all its
      * subdirectories
      * @param absoluteDirectoryPath absolute path to the directory.
      * @throws IOException
      */
-    public InspectitConfig parseConfigFromBaseDirectory(String absoluteDirectoryPath){
+    public String mergeConfigYamls(String absoluteDirectoryPath){
 
         Path absoluteBasePath = Paths.get(absoluteDirectoryPath);
 
         List<String> allYamlFiles = getAllYamlFiles(absoluteBasePath);
+        String configYaml = loadAndMergeMultiple(allYamlFiles);
 
-        return parseConfigFromYamls(allYamlFiles);
+        return configYaml;
     }
 
     /**
